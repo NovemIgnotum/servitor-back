@@ -86,6 +86,20 @@ const readOneUser = async (req: Request, res: Response) => {
   }
 };
 
+const readAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await UserModel.find();
+
+    Retour.success("Users fetched successfully");
+    return res
+      .status(200)
+      .json({ message: "Users fetched successfully", users });
+  } catch (error) {
+    Retour.error("Error while fetching users");
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -163,4 +177,11 @@ const deleteUser = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-export default { createUser, loginUser, readOneUser, updateUser, deleteUser };
+export default {
+  createUser,
+  loginUser,
+  readOneUser,
+  readAllUsers,
+  updateUser,
+  deleteUser,
+};
