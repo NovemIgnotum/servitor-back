@@ -66,6 +66,12 @@ export class MinecraftHandler {
     return container.id;
   }
 
+  async getInfo(containerId: string): Promise<any> {
+    const container = docker.getContainer(containerId);
+    const data = await container.inspect();
+    return data;
+  }
+
   async startContainer(containerId: string): Promise<void> {
     const container = docker.getContainer(containerId);
     await container.start();
