@@ -257,16 +257,24 @@ const getServerStats = async (req: Request, res: Response) => {
 
     const stats = await mcHandler.getStats(server.containerId);
     console.log("Container stats:", stats);
-
     const players = await mcHandler.getPlayerInfo(
       server.containerId,
       server.rconPassword
     );
-    console.log(`Current players: ${players}`);
     console.log(players);
 
+    const craftedResponse = {
+      cpuPercent: stats.cpuPercent,
+      memoryUsage: stats.memoryUsage,
+      memoryLimit: stats.memoryLimit,
+      memoryPercent: stats.memoryPercent,
+      playerCount: players ? players.count : 0,
+      players: players ? players.players : [],
+    };
     Retour.success("Fetched server stats");
-    return res.status(501).json({ message: "Not implemented" });
+    return res
+      .status(200)
+      .json({ message: "Fetched server stats", stats: craftedResponse });
   } catch (error) {
     Retour.error("Error while fetching server stats");
     return res.status(500).json({ message: "Internal server error", error });
