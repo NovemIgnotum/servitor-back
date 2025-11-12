@@ -21,6 +21,7 @@ const ServerSchema: Schema = new Schema(
     type: { type: String }, // Type of server (e.g., "forge", "vanilla", "modded")
     mods: [{ type: String }], // List of installed mods (if applicable)
     configPath: { type: String }, // Path to the configuration folder on disk
+    rconPassword: { type: String }, // RCON password for remote console access
   },
   {
     timestamps: true,

@@ -17,13 +17,35 @@ const createServer = async (req: Request, res: Response) => {
       name,
       owner,
       game,
-      ipAddress: "<server-ip-address>", // This should be set properly in a real scenario
+      ipAddress: "",
       port,
       containerId: "",
+      rconPassword: "",
     });
 
-    const containerId = await mcHandler.createContainer(server);
-    server.containerId = containerId;
+    const dockerInfo = await mcHandler.createContainer(server);
+    server.containerId = Object(dockerInfo).containerId;
+    server.rconPassword = Object(dockerInfo).rconPassword;
+
+    // Try to resolve the host:port mapping and set ipAddress
+    try {
+      const hostPublicIP =
+        process.env.HOST_PUBLIC_IP ||
+        req.hostname ||
+        req.socket.remoteAddress ||
+        "127.0.0.1";
+      const addr = await getGameServerAddress(server.containerId, hostPublicIP);
+      // addr.address is like `${hostPublicIP}:${hostPort}` or empty string
+      server.ipAddress = addr.address || hostPublicIP;
+    } catch (addrErr) {
+      // If anything goes wrong, leave ipAddress empty or fallback to hostPublicIP
+      server.ipAddress =
+        process.env.HOST_PUBLIC_IP ||
+        req.hostname ||
+        req.socket.remoteAddress ||
+        "";
+    }
+
     server.status = "running";
 
     await server.save();
@@ -97,27 +119,6 @@ const getServersByGame = async (req: Request, res: Response) => {
     return res.status(200).json({ servers: foundedServers });
   } catch (error) {
     Retour.error("Error while fetching servers by game");
-    return res.status(500).json({ message: "Internal server error", error });
-  }
-};
-
-const getServerInfo = async (req: Request, res: Response) => {
-  try {
-    const { serverId } = req.params;
-
-    const server = await ServerModel.findById(serverId);
-
-    if (!server) {
-      Retour.error("Server not found");
-      return res.status(404).json({ message: "Server not found" });
-    }
-
-    //const info = await mcHandler.getInfo(server.containerId);
-    return res.status(501).json({ message: "Not implemented" });
-    Retour.success("Fetched server info");
-    //return res.status(200).json({ info });
-  } catch (error) {
-    Retour.error("Error while fetching server info");
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
@@ -239,6 +240,39 @@ const addOrRemoveOps = async (req: Request, res: Response) => {
   }
 };
 
+const getServerStats = async (req: Request, res: Response) => {
+  try {
+    const { serverId } = req.params;
+
+    const server = await ServerModel.findById(serverId);
+    if (!server) {
+      Retour.error("Server not found");
+      return res.status(404).json({ message: "Server not found" });
+    }
+
+    if (!server.containerId) {
+      Retour.error("Server has no container id");
+      return res.status(400).json({ message: "Server has no container id" });
+    }
+
+    const stats = await mcHandler.getStats(server.containerId);
+    console.log("Container stats:", stats);
+
+    const players = await mcHandler.getPlayerInfo(
+      server.containerId,
+      server.rconPassword
+    );
+    console.log(`Current players: ${players}`);
+    console.log(players);
+
+    Retour.success("Fetched server stats");
+    return res.status(501).json({ message: "Not implemented" });
+  } catch (error) {
+    Retour.error("Error while fetching server stats");
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 const changeOwner = async (req: Request, res: Response) => {
   try {
     const { serverId } = req.params;
@@ -315,7 +349,7 @@ export default {
   getServerById,
   getServersByUser,
   getServersByGame,
-  getServerInfo,
+  getServerStats,
   startServer,
   stopServer,
   addOrRemoveOps,

@@ -15,4 +15,5 @@ export interface IServer extends Document {
   type?: string;
   mods?: string[];
   configPath?: string;
+  rconPassword: string;
 }
