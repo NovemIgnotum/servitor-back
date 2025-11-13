@@ -344,7 +344,37 @@ const changeOwner = async (req: Request, res: Response) => {
 
 const deleteServer = async (req: Request, res: Response) => {
   try {
-    return res.status(501).json({ message: "Not implemented" });
+    const { serverId, requester } = req.params;
+
+    if (!requester || !serverId) {
+      Retour.error("Missing parameters");
+      return res.status(400).json({ message: "Missing parameters" });
+    }
+
+    const server = await ServerModel.findById(serverId);
+
+    if (!server) {
+      Retour.error("Server not found");
+      return res.status(404).json({ message: "Server not found" });
+    }
+
+    if (server.status === "running") {
+      Retour.error("Cannot delete a running server");
+      return res
+        .status(400)
+        .json({ message: "Cannot delete a running server" });
+    }
+
+    if (server.owner.toString() !== requester) {
+      Retour.error("Unauthorized operation");
+      return res.status(403).json({ message: "Unauthorized operation" });
+    }
+
+    await mcHandler.removeContainer(server.containerId);
+    await ServerModel.findByIdAndDelete(serverId);
+
+    Retour.success("Server deleted successfully");
+    return res.status(200).json({ message: "Server deleted successfully" });
   } catch (error) {
     Retour.error("Error while deleting server");
     return res.status(500).json({ message: "Internal server error", error });

@@ -13,5 +13,5 @@ router.get("/start/:serverId", ServerController.startServer);
 router.get("/stop/:serverId", ServerController.stopServer);
 router.put("/ops/:serverId", ServerController.addOrRemoveOps);
 router.put("/changeOwner/:serverId", ServerController.changeOwner);
-router.delete("/delete/:serverId", ServerController.deleteServer);
+router.delete("/delete/:serverId/:requester", ServerController.deleteServer);
 export default router;

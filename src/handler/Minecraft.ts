@@ -1,6 +1,10 @@
 import docker from "../services/dockerClient";
 import { IServer } from "../interfaces/Server";
 
+// Pour les versions de Minecraft
+// Utiliser l'API CurseForge
+// Permet d'avoir les versions du jeux et des loaders
+
 interface PlayerInfo {
   count: number;
   players: string[];
