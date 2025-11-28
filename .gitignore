@@ -1,2 +1,5 @@
 node_modules
 .env
+tests
+jest.config.ts
+jest.config.js

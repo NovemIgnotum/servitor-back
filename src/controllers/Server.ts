@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Retour from "../library/Retour";
 import { MinecraftHandler } from "../handler/Minecraft";
+import { ArkHandler } from "../handler/ark";
 import { getGameServerAddress } from "../utils/getServerAddress";
 
 //Models
@@ -8,10 +9,20 @@ import ServerModel from "../models/Server";
 import UserModel from "../models/User";
 
 const mcHandler = new MinecraftHandler();
+const arkHandler = new ArkHandler();
 
 const createServer = async (req: Request, res: Response) => {
   try {
-    const { name, owner, game, port } = req.body;
+    const {
+      name,
+      owner,
+      game,
+      port,
+      map,
+      maxPlayers,
+      serverPassword,
+      adminPassword,
+    } = req.body;
 
     const server = new ServerModel({
       name,
@@ -23,7 +34,29 @@ const createServer = async (req: Request, res: Response) => {
       rconPassword: "",
     });
 
-    const dockerInfo = await mcHandler.createContainer(server);
+    if (game === "minecraft") {
+      var dockerInfo = await mcHandler.createContainer(server);
+    } else if (game === "ark") {
+      if (!map || !maxPlayers) {
+        Retour.error("Missing parameters for ARK server");
+        return res
+          .status(400)
+          .json({ message: "Missing parameters for ARK server" });
+      }
+      const info = {
+        serverName: name,
+        serverMap: map,
+        maxPlayers: maxPlayers,
+        serverPassword: serverPassword,
+        adminPassword: adminPassword,
+      };
+
+      var dockerInfo = await arkHandler.createContainer(server, info);
+    } else {
+      Retour.error("Unsupported game type");
+      return res.status(400).json({ message: "Unsupported game type" });
+    }
+
     server.containerId = Object(dockerInfo).containerId;
     server.rconPassword = Object(dockerInfo).rconPassword;
 
