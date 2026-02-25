@@ -1,0 +1,30 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createMockUser = exports.resetUserModelMocks = exports.MockUserModel = exports.mockUserSave = exports.mockUserFindByIdAndDelete = exports.mockUserFindByIdAndUpdate = exports.mockUserCreate = exports.mockUserFindOne = exports.mockUserFind = exports.mockUserFindById = void 0;
+exports.mockUserFindById = jest.fn();
+exports.mockUserFind = jest.fn();
+exports.mockUserFindOne = jest.fn();
+exports.mockUserCreate = jest.fn();
+exports.mockUserFindByIdAndUpdate = jest.fn();
+exports.mockUserFindByIdAndDelete = jest.fn();
+exports.mockUserSave = jest.fn();
+exports.MockUserModel = jest.fn().mockImplementation((data) => (Object.assign(Object.assign({}, data), { save: exports.mockUserSave })));
+exports.MockUserModel.findById = exports.mockUserFindById;
+exports.MockUserModel.find = exports.mockUserFind;
+exports.MockUserModel.findOne = exports.mockUserFindOne;
+exports.MockUserModel.create = exports.mockUserCreate;
+exports.MockUserModel.findByIdAndUpdate = exports.mockUserFindByIdAndUpdate;
+exports.MockUserModel.findByIdAndDelete = exports.mockUserFindByIdAndDelete;
+const resetUserModelMocks = () => {
+    exports.mockUserFindById.mockReset();
+    exports.mockUserFind.mockReset();
+    exports.mockUserFindOne.mockReset();
+    exports.mockUserCreate.mockReset();
+    exports.mockUserFindByIdAndUpdate.mockReset();
+    exports.mockUserFindByIdAndDelete.mockReset();
+    exports.mockUserSave.mockReset();
+};
+exports.resetUserModelMocks = resetUserModelMocks;
+const createMockUser = (overrides = {}) => (Object.assign({ _id: "user-456", email: "test@example.com", password: "password123", servers: [] }, overrides));
+exports.createMockUser = createMockUser;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTW9ja1VzZXJNb2RlbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy90ZXN0cy9tb2Nrcy9Nb2NrVXNlck1vZGVsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFhLFFBQUEsZ0JBQWdCLEdBQUcsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDO0FBQzdCLFFBQUEsWUFBWSxHQUFHLElBQUksQ0FBQyxFQUFFLEVBQUUsQ0FBQztBQUN6QixRQUFBLGVBQWUsR0FBRyxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUM7QUFDNUIsUUFBQSxjQUFjLEdBQUcsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDO0FBQzNCLFFBQUEseUJBQXlCLEdBQUcsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDO0FBQ3RDLFFBQUEseUJBQXlCLEdBQUcsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDO0FBQ3RDLFFBQUEsWUFBWSxHQUFHLElBQUksQ0FBQyxFQUFFLEVBQUUsQ0FBQztBQUV6QixRQUFBLGFBQWEsR0FBUSxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUMsa0JBQWtCLENBQUMsQ0FBQyxJQUFJLEVBQUUsRUFBRSxDQUFDLGlDQUNwRSxJQUFJLEtBQ1AsSUFBSSxFQUFFLG9CQUFZLElBQ2xCLENBQUMsQ0FBQztBQUVKLHFCQUFhLENBQUMsUUFBUSxHQUFHLHdCQUFnQixDQUFDO0FBQzFDLHFCQUFhLENBQUMsSUFBSSxHQUFHLG9CQUFZLENBQUM7QUFDbEMscUJBQWEsQ0FBQyxPQUFPLEdBQUcsdUJBQWUsQ0FBQztBQUN4QyxxQkFBYSxDQUFDLE1BQU0sR0FBRyxzQkFBYyxDQUFDO0FBQ3RDLHFCQUFhLENBQUMsaUJBQWlCLEdBQUcsaUNBQXlCLENBQUM7QUFDNUQscUJBQWEsQ0FBQyxpQkFBaUIsR0FBRyxpQ0FBeUIsQ0FBQztBQUVyRCxNQUFNLG1CQUFtQixHQUFHLEdBQUcsRUFBRTtJQUN0Qyx3QkFBZ0IsQ0FBQyxTQUFTLEVBQUUsQ0FBQztJQUM3QixvQkFBWSxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQ3pCLHVCQUFlLENBQUMsU0FBUyxFQUFFLENBQUM7SUFDNUIsc0JBQWMsQ0FBQyxTQUFTLEVBQUUsQ0FBQztJQUMzQixpQ0FBeUIsQ0FBQyxTQUFTLEVBQUUsQ0FBQztJQUN0QyxpQ0FBeUIsQ0FBQyxTQUFTLEVBQUUsQ0FBQztJQUN0QyxvQkFBWSxDQUFDLFNBQVMsRUFBRSxDQUFDO0FBQzNCLENBQUMsQ0FBQztBQVJXLFFBQUEsbUJBQW1CLHVCQVE5QjtBQUdLLE1BQU0sY0FBYyxHQUFHLENBQUMsU0FBUyxHQUFHLEVBQUUsRUFBRSxFQUFFLENBQUMsaUJBQ2hELEdBQUcsRUFBRSxVQUFVLEVBQ2YsS0FBSyxFQUFFLGtCQUFrQixFQUN6QixRQUFRLEVBQUUsYUFBYSxFQUN2QixPQUFPLEVBQUUsRUFBRSxJQUNSLFNBQVMsRUFDWixDQUFDO0FBTlUsUUFBQSxjQUFjLGtCQU14QiJ9

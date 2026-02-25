@@ -1,0 +1,30 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createMockServer = exports.resetServerModelMocks = exports.MockServerModel = exports.mockSave = exports.mockFindByIdAndDelete = exports.mockFindByIdAndUpdate = exports.mockCreate = exports.mockFindOne = exports.mockFind = exports.mockFindById = void 0;
+exports.mockFindById = jest.fn();
+exports.mockFind = jest.fn();
+exports.mockFindOne = jest.fn();
+exports.mockCreate = jest.fn();
+exports.mockFindByIdAndUpdate = jest.fn();
+exports.mockFindByIdAndDelete = jest.fn();
+exports.mockSave = jest.fn();
+exports.MockServerModel = jest.fn().mockImplementation((data) => (Object.assign(Object.assign({}, data), { _id: data._id || 'mock-server-id-123', save: exports.mockSave, operators: data.operators || [] })));
+exports.MockServerModel.findById = exports.mockFindById;
+exports.MockServerModel.find = exports.mockFind;
+exports.MockServerModel.findOne = exports.mockFindOne;
+exports.MockServerModel.create = exports.mockCreate;
+exports.MockServerModel.findByIdAndUpdate = exports.mockFindByIdAndUpdate;
+exports.MockServerModel.findByIdAndDelete = exports.mockFindByIdAndDelete;
+const resetServerModelMocks = () => {
+    exports.mockFindById.mockReset();
+    exports.mockFind.mockReset();
+    exports.mockFindOne.mockReset();
+    exports.mockCreate.mockReset();
+    exports.mockFindByIdAndUpdate.mockReset();
+    exports.mockFindByIdAndDelete.mockReset();
+    exports.mockSave.mockReset();
+};
+exports.resetServerModelMocks = resetServerModelMocks;
+const createMockServer = (overrides = {}) => (Object.assign({ _id: "mock-server-id-123", name: "Test Server", game: "minecraft", version: "1.20.1", status: "running", containerId: "mock-container-abc", owner: "mock-user-id", rconPassword: "test-rcon-pass", save: exports.mockSave.mockResolvedValue(this) }, overrides));
+exports.createMockServer = createMockServer;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTW9ja1NlcnZlck1vZGVsLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3Rlc3RzL21vY2tzL01vY2tTZXJ2ZXJNb2RlbC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBYSxRQUFBLFlBQVksR0FBRyxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUM7QUFDekIsUUFBQSxRQUFRLEdBQUcsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDO0FBQ3JCLFFBQUEsV0FBVyxHQUFHLElBQUksQ0FBQyxFQUFFLEVBQUUsQ0FBQztBQUN4QixRQUFBLFVBQVUsR0FBRyxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUM7QUFDdkIsUUFBQSxxQkFBcUIsR0FBRyxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUM7QUFDbEMsUUFBQSxxQkFBcUIsR0FBRyxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUM7QUFDbEMsUUFBQSxRQUFRLEdBQUcsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDO0FBRXJCLFFBQUEsZUFBZSxHQUFRLElBQUksQ0FBQyxFQUFFLEVBQUUsQ0FBQyxrQkFBa0IsQ0FBQyxDQUFDLElBQUksRUFBRSxFQUFFLENBQUMsaUNBQ3RFLElBQUksS0FDUCxHQUFHLEVBQUUsSUFBSSxDQUFDLEdBQUcsSUFBSSxvQkFBb0IsRUFDckMsSUFBSSxFQUFFLGdCQUFRLEVBQ2QsU0FBUyxFQUFFLElBQUksQ0FBQyxTQUFTLElBQUksRUFBRSxJQUMvQixDQUFDLENBQUM7QUFFSix1QkFBZSxDQUFDLFFBQVEsR0FBRyxvQkFBWSxDQUFDO0FBQ3hDLHVCQUFlLENBQUMsSUFBSSxHQUFHLGdCQUFRLENBQUM7QUFDaEMsdUJBQWUsQ0FBQyxPQUFPLEdBQUcsbUJBQVcsQ0FBQztBQUN0Qyx1QkFBZSxDQUFDLE1BQU0sR0FBRyxrQkFBVSxDQUFDO0FBQ3BDLHVCQUFlLENBQUMsaUJBQWlCLEdBQUcsNkJBQXFCLENBQUM7QUFDMUQsdUJBQWUsQ0FBQyxpQkFBaUIsR0FBRyw2QkFBcUIsQ0FBQztBQUVuRCxNQUFNLHFCQUFxQixHQUFHLEdBQUcsRUFBRTtJQUN4QyxvQkFBWSxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQ3pCLGdCQUFRLENBQUMsU0FBUyxFQUFFLENBQUM7SUFDckIsbUJBQVcsQ0FBQyxTQUFTLEVBQUUsQ0FBQztJQUN4QixrQkFBVSxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQ3ZCLDZCQUFxQixDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQ2xDLDZCQUFxQixDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQ2xDLGdCQUFRLENBQUMsU0FBUyxFQUFFLENBQUM7QUFDdkIsQ0FBQyxDQUFDO0FBUlcsUUFBQSxxQkFBcUIseUJBUWhDO0FBR0ssTUFBTSxnQkFBZ0IsR0FBRyxDQUFDLFNBQVMsR0FBRyxFQUFFLEVBQUUsRUFBRSxDQUFDLGlCQUNsRCxHQUFHLEVBQUUsb0JBQW9CLEVBQ3pCLElBQUksRUFBRSxhQUFhLEVBQ25CLElBQUksRUFBRSxXQUFXLEVBQ2pCLE9BQU8sRUFBRSxRQUFRLEVBQ2pCLE1BQU0sRUFBRSxTQUFTLEVBQ2pCLFdBQVcsRUFBRSxvQkFBb0IsRUFDakMsS0FBSyxFQUFFLGNBQWMsRUFDckIsWUFBWSxFQUFFLGdCQUFnQixFQUM5QixJQUFJLEVBQUUsZ0JBQVEsQ0FBQyxpQkFBaUIsQ0FBQyxJQUFJLENBQUMsSUFDbkMsU0FBUyxFQUNaLENBQUM7QUFYVSxRQUFBLGdCQUFnQixvQkFXMUIifQ==
